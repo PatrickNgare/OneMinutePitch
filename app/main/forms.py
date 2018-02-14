@@ -4,8 +4,8 @@ from wtforms import StringField,TextAreaField,SubmitField, SelectField, RadioFie
 from wtforms.validators import Required
 
 class CommentsForm(FlaskForm):
-    comment = TextAreaField('Comment', validators=[Required()])
-    vote=RadioField('default field arguments', choices=[('1', 'UpVote'), ('1', 'DownVote')])
+    comment = TextAreaField('Comment Here', validators=[Required()])
+    
     submit = SubmitField('SUBMIT')  
 
 class UpdateProfile(FlaskForm):
@@ -18,8 +18,6 @@ class PitchForm(FlaskForm):
     submit = SubmitField('Create Pitch')
 
 class UpvoteForm(FlaskForm):
-    '''
-    Class to create a wtf form for upvoting a pitch
-    '''
+    
     submit = SubmitField('Upvote')
     
