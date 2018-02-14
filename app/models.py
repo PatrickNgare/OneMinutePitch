@@ -59,7 +59,7 @@ class Pitch(db.Model):
 
     def save_pitch(self):
         '''
-        Function that saves pitches
+z        Function that saves pitches
         '''
         db.session.add(self)
         db.session.commit()
