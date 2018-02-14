@@ -1,0 +1,17 @@
+{% extends 'base.html'%}
+
+{% block content %}
+
+
+{% for item in comments %}
+
+<div class="panel">
+    <p>{{item.comment}}</p>  
+    <h5>Comment by: {{item.username}}</span></h5>
+</div>
+{%endfor%}
+
+
+
+
+{% endblock %}
