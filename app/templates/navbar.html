@@ -1,7 +1,7 @@
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-info">
     <h5 class="my-0 mr-md-auto font-weight-normal text-light">Pitch Deck </h5>
     <nav class="my-2 my-md-0 mr-md-3">
-          <ul class="nav navbar-nav navbar-right">
+          <ul class="nav navbar-nav navbar-primary">
                 {% if current_user.is_authenticated %}
                 <li style="padding-left:100px;margin: 0px 0px 0px 10px;position:absolute" class="text-light mt-2">Signed as {{current_user.username}}</li>
                 <li style="padding-right:120px" ><a class="btn btn-outline-primary text-light" href="{{url_for('auth.logout')}}">Sign out</a></li>
