@@ -1,99 +1,72 @@
 from flask import render_template, request, redirect, url_for, abort  
 from . import main  
-from .forms import CommentsForm, UpdateProfile, PitchForm, UpvoteForm
-from ..models import Comment, Pitch, User 
+from .forms import CommentsForm, UpdateProfile, PitchForm
+from ..models import Comment, Pitch, User, PitchCategory
 from flask_login import login_required, current_user
 from .. import db
 
-import markdown2
 
 
 
 @main.route('/')
 def index():
-    '''
-    View root page function that returns the index page and its data
-    '''
-    title = 'Home - Welcome to The best Pitching Website Online'
+   
 
-    search_pitch = request.args.get('pitch_query')
+    
     pitches= Pitch.get_all_pitches()  
 
-    return render_template('index.html', title = title, pitches= pitches)
+    return render_template('index.html', pitches= pitches)
 
 #this section consist of the category root functions
 
 @main.route('/inteview/pitches/')
 def interview():
-    '''
-    View root page function that returns the index page and its data
-    '''
+    
     pitches= Pitch.get_all_pitches()
-    title = 'Home - Welcome to The best Pitching Website Online'  
-    return render_template('interview.html', title = title, pitches= pitches )
+    
+    return render_template('interview.html', pitches= pitches )
 
-@main.route('/pick_up_lines/pitches/')
+@main.route('/picklines/pitches/')
 def pick_up_line():
-    '''
-    View root page function that returns the index page and its data
-    '''
-    title = 'Pick Up Lines'
+    
 
     pitches= Pitch.get_all_pitches()
 
-    return render_template('pick_up_lines.html', title = title, pitches= pitches )
+    return render_template('picklines.html', pitches= pitches )
 
 @main.route('/promotion/pitches/')
 def promotion():
-    '''
-    View root page function that returns the index page and its data
-    '''
-    title = 'Promotion Pitches'
+    
 
     pitches= Pitch.get_all_pitches()
 
-    return render_template('promotion.html', title = title, pitches= pitches )
+    return render_template('promotion.html', pitches= pitches )
 
 
 @main.route('/product/pitches/')
 def product():
-    '''
-    View root page function that returns the index page and its data
-    '''
-    title = 'Product Pitches'
+    
     pitches= Pitch.get_all_pitches()
-    return render_template('product.html', title = title, pitches= pitches )
+    return render_template('product.html', pitches= pitches )
  
-#  end of category root functions
+
 
 @main.route('/pitch/<int:pitch_id>')
 def pitch(pitch_id):
 
-    '''
-    View pitch page function that returns the pitch details page and its data
-    '''
+    
     found_pitch= get_pitch(pitch_id)
     title = pitch_id
     pitch_comments = Comment.get_comments(pitch_id)
 
     return render_template('pitch.html',title= title ,found_pitch= found_pitch, pitch_comments= pitch_comments)
 
-@main.route('/search/<pitch_name>')
-def search(pitch_name):
-    '''
-    View function to display the search results
-    '''
-    searched_pitches = search_pitch(pitch_name)
-    title = f'search results for {pitch_name}'
 
-    return render_template('search.html',pitches = searched_pitches)
 
 @main.route('/pitch/new/', methods = ['GET','POST'])
 @login_required
 def new_pitch():
-    '''
-    Function that creates new pitches
-    '''
+   
     form = PitchForm()
 
 
@@ -108,13 +81,11 @@ def new_pitch():
         new_pitch.save_pitch()
         return redirect(url_for('main.index'))
 
-    return render_template('new_pitch.html', new_pitch_form= form, category= category)
+    return render_template('create_pitch.html', create_pitch= form, category= category)
 
 @main.route('/category/<int:id>')
 def category(id):
-    '''
-    function that returns pitches based on the entered category id
-    '''
+    
     category = PitchCategory.query.get(id)
 
     if category is None:
@@ -123,17 +94,17 @@ def category(id):
     pitches_in_category = Pitches.get_pitch(id)
     return render_template('category.html' ,category= category, pitches= pitches_in_category)
 
-@main.route('/pitch/comments/new/<int:id>',methods = ['GET','POST'])
+@main.route('/pitch/comment/new/<int:id>',methods = ['GET','POST'])
 @login_required
 def new_comment(id):
     form = CommentsForm()
-    vote_form = UpvoteForm()
+  
     if form.validate_on_submit():
-        new_comment = Comment(pitch_id =id,comment=form.comment.data,username=current_user.username,votes=form.vote.data)
+        new_comment = Comment(pitch_id =id,comment=form.comment.data,username=current_user.username)
         new_comment.save_comment()
         return redirect(url_for('main.index'))
-    #title = f'{pitch_result.id} review'
-    return render_template('new_comment.html',comment_form=form, vote_form= vote_form)
+    
+    return render_template('comment.html',comment_form=form)
 
 @main.route('/user/<uname>/update/pic',methods= ['POST'])
 @login_required
@@ -176,11 +147,9 @@ def update_profile(uname):
 
 @main.route('/view/comment/<int:id>')
 def view_comments(id):
-    '''
-    Function that returs  the comments belonging to a particular pitch
-    '''
+    
     comments = Comment.get_comments(id)
-    return render_template('view_comments.html',comments = comments, id=id)
+    return render_template('show_comments.html',comments = comments, id=id)
 
 
 
