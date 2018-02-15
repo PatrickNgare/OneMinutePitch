@@ -45,9 +45,7 @@ class User(UserMixin, db.Model):
         return f'User {self.username}'
 
 class Pitch(db.Model):
-    '''
-    Pitch class to define Pitch Objects
-    '''
+    
     __tablename__ = 'pitch'
 
     id = db.Column(db.Integer,primary_key = True)
@@ -58,9 +56,7 @@ class Pitch(db.Model):
         
 
     def save_pitch(self):
-        '''
-z        Function that saves pitches
-        '''
+        
         db.session.add(self)
         db.session.commit()
     
@@ -75,7 +71,10 @@ z        Function that saves pitches
         return Pitch.query.filter_by(category_id= cat_id)
 
 
-
+    @classmethod
+    def get_pitch(cls,id):
+        
+        return Pitch.query.filter_by(id)
 
 class Comment(db.Model):
 
@@ -128,3 +127,7 @@ class PitchCategory(db.Model):
         
         categories = PitchCategory.query.all()
         return categories
+    def save_comment(self):
+        
+        db.session.add(self)
+        db.session.commit()

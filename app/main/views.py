@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for, abort  
 from . import main  
-from .forms import CommentsForm, UpdateProfile, PitchForm
+from .forms import CommentsForm, PitchForm
 from ..models import Comment, Pitch, User, PitchCategory
 from flask_login import login_required, current_user
 from .. import db
@@ -14,6 +14,8 @@ def index():
 
     
     pitches= Pitch.get_all_pitches()  
+    title='Pitch Deck'
+    search_pitch = request.args.get('pitch_query')
 
     return render_template('index.html', pitches= pitches)
 
@@ -65,7 +67,7 @@ def pitch(pitch_id):
 
 @main.route('/pitch/new/', methods = ['GET','POST'])
 @login_required
-def new_pitch():
+def create_pitch():
    
     form = PitchForm()
 
@@ -92,6 +94,7 @@ def category(id):
         abort(404)
 
     pitches_in_category = Pitches.get_pitch(id)
+   
     return render_template('category.html' ,category= category, pitches= pitches_in_category)
 
 @main.route('/pitch/comment/new/<int:id>',methods = ['GET','POST'])
@@ -106,44 +109,8 @@ def new_comment(id):
     
     return render_template('comment.html',comment_form=form)
 
-@main.route('/user/<uname>/update/pic',methods= ['POST'])
-@login_required
-def update_pic(uname):
-    user = User.query.filter_by(username = uname).first()
-    if 'photo' in request.files:
-        filename = photos.save(request.files['photo'])
-        path = f'photos/{filename}'
-        user.profile_pic_path = path 
-        db.session.commit()
-    return redirect(url_for('main.profile',uname=uname))
 
-@main.route('/user/<uname>')
-def profile(uname):
-    user = User.query.filter_by(username = uname).first()
 
-    if user is None:
-        abort(404)
-
-    return render_template("profile/profile.html", user = user)
-
-@main.route('/user/<uname>/update',methods = ['GET','POST'])
-@login_required
-def update_profile(uname):
-    user = User.query.filter_by(username = uname).first()
-    if user is None:
-        abort(404)
-
-    form = UpdateProfile()
-
-    if form.validate_on_submit():
-        user.bio = form.bio.data
-
-        db.session.add(user)
-        db.session.commit()
-
-        return redirect(url_for('.profile',uname=user.username))
-    
-    return render_template('profile/update.html',form =form)
 
 @main.route('/view/comment/<int:id>')
 def view_comments(id):
@@ -153,11 +120,5 @@ def view_comments(id):
 
 
 
-@main.route('/test/<int:id>')  
-def test(id):
-    '''
-    this is route for basic testing
-    '''
-    pitch =Pitch.query.filter_by(id=1).first()
-    return render_template('test.html',pitch= pitch)
+
 
