@@ -1,15 +1,11 @@
 {% extends 'base.html'%}
 {% import 'macros.html' as macro%}
 
-{% block styles%}
-{{ super() }}
-<link href="https://fonts.googleapis.com/css?family=Playfair+Display" rel="stylesheet">
-{% endblock %}
+
 
 {% block content %}
-<div class="panel panel-success">
-        <div class="panel-heading">Product Pitch</div>
-        <div class="panel-body">The key to successfully pitching a new product idea or invention to a potential investor or company is being concise and clear. </div>\
+<div class="panel row">
+        
         {{macro.displayPitchesInCategories(pitches,4)}}
 
       </div>    

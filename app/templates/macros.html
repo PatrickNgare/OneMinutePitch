@@ -15,8 +15,6 @@
       {% if pitch.category_id==id%}
           <div class="row">
               <p>{{pitch.pitch}}</p>
-              <a href="{{url_for('main.new_comment',id=pitch.id)}}">Add a Comment</a>&nbsp;&nbsp;|
-              <a href="{{url_for('main.view_comments',id=pitch.id)}}">View Comments</a>&nbsp;&nbsp;|
               
           </div>
       {% endif%}
@@ -32,7 +30,7 @@
             <h4>Author</h4>
             <p>{{comment.user.username}}</p>
           </div>
-          <div class="col-xs-10 col-sm-10 col-md-8 col-lg-8">
+          <div class="col">
             <h2> <a href="{{url_for('main.single_comment',id=comment.id)}}">{{comment.pitch_title}}</a> </h2>
           </div>
         </div>
